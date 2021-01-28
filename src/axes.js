@@ -3,6 +3,8 @@ import reduce from 'lodash/reduce'
 import {arc} from 'd3-shape'
 import logger from './logger'
 
+const uuidv4 = require('uuid/v4');
+
 const _buildAxisData = (value, axesGroup, conf) => {
   return {
     value: value,
@@ -37,7 +39,46 @@ export const _buildAxesData = (conf) => {
 }
 
 export const renderAxes = (parentElement, conf, instance, scale) => {
-  const axes = _buildAxesData(conf)
+  const axes         = _buildAxesData(conf)
+  const layout       = instance._layout;
+
+  //Code to handle axis labels
+  if((layout.conf.trackLabelBlockId !== undefined) && (layout.conf.trackLabelBlockId in layout.blocks)) {
+    const labelBlock = parentElement.select(function () { return this.parentNode; })
+                        .append('g')
+                        .attr('class', 'label-axes-block')
+                        .attr('transform', `rotate(${layout.blocks[layout.conf.trackLabelBlockId].start * 360 / (2 * Math.PI)})`)
+    conf.axes.forEach( (a,i) => {
+            const radius = conf.direction === 'in' ? (conf.outerRadius - scale(axes[i].value)) : (conf.innerRadius + scale(axes[i].value))
+            if( ("axisLabelConf" in a) && ("label" in a.axisLabelConf) && (a.axisLabelConf.label !== undefined) ) {
+                const arcid = 'arcid-' + uuidv4()
+                const axisBlock = labelBlock.append('g')
+                    .attr('class', 'label-axis-block')
+                axisBlock.append('path')
+                        .attr('class', 'label-axis-arcpath')
+                        .attr('fill', 'none')
+                        .attr('stroke', 'none')
+                        .attr('opacity', 1)
+                        .attr('d', arc()
+                            .innerRadius(radius)
+                            .outerRadius(radius)
+                            .startAngle(0)
+                            .endAngle(layout.blocks[layout.conf.trackLabelBlockId].end - layout.blocks[layout.conf.trackLabelBlockId].start)
+                        )
+                        .attr('id', arcid)
+                const label = axisBlock.append('text')
+                    .attr('class', a.axisLabelConf.class)
+                    .attr('text-anchor', 'end')
+
+
+                // http://stackoverflow.com/questions/20447106/how-to-center-horizontal-and-vertical-text-along-an-textpath-inside-an-arc-usi
+                const labelPath = label.append('textPath')
+                                    .attr('startOffset', '50%')
+                                    .attr('xlink:href', '#' + arcid)
+                                    .text(a.axisLabelConf.label)
+            }
+    });
+  }
 
   const axis = arc()
     .innerRadius((d) => {

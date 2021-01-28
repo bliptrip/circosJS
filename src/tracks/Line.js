@@ -7,6 +7,10 @@ import {axes, radial, common, values} from '../configs'
 import {curveLinear, radialLine, radialArea} from 'd3-shape'
 
 const defaultConf = assign({
+  trackLabelConf: {
+    value: {label: undefined, class: undefined},
+    iteratee: false
+  },
   direction: {
     value: 'out',
     iteratee: false

@@ -14,6 +14,10 @@ import {
 } from 'd3-shape'
 
 const defaultConf = assign({
+  trackLabelConf: {
+    value: {label: undefined, class: undefined},
+    iteratee: false
+  },
   direction: {
     value: 'out',
     iteratee: false
@@ -72,6 +76,7 @@ const getSymbol = (key) => {
 export default class Scatter extends Track {
   constructor (instance, conf, data) {
     super(instance, conf, defaultConf, data, parsePositionValueData)
+
   }
 
   renderDatum (parentElement, conf, layout) {

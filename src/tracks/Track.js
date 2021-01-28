@@ -7,6 +7,8 @@ import {buildScale} from '../utils'
 import {buildColorValue} from '../colors'
 import {renderAxes} from '../axes'
 
+const uuidv4 = require('uuid/v4');
+
 /**
  * Abstract class used by all tracks
 **/
@@ -43,6 +45,8 @@ export default class Track {
     const track = parentElement.append('g')
       .attr('class', name)
       .attr('z-index', this.conf.zIndex)
+
+    this.renderTrackLabel(track, instance._layout, this.conf)
     const datumContainer = this.renderBlock(track, this.data, instance._layout, this.conf)
     if (this.conf.axes && this.conf.axes.length > 0) {
       renderAxes(datumContainer, this.conf, instance, this.scale)
@@ -113,6 +117,49 @@ export default class Track {
     }
 
     return block
+  }
+
+  //Intended to be overwritten by children classes to modify the label/labelPath attributes -- CSS cannot modify these,
+  //but just styling elements
+  renderTrackLabelAddendum(label, labelPath) {
+      return;
+  }
+
+  renderTrackLabel (parentElement, layout, conf) {
+      //If the layout defines a block id to contain track labels
+      if((layout.conf.trackLabelBlockId !== undefined) && (layout.conf.trackLabelBlockId in layout.blocks)) {
+          if( ("trackLabelConf" in conf) && ("label" in conf.trackLabelConf) && (conf.trackLabelConf.label !== undefined) ) {
+            const labelBlock = parentElement.append('g')
+                                    .attr('class', 'label-block')
+                                    .attr('transform', `rotate(${layout.blocks[layout.conf.trackLabelBlockId].start * 360 / (2 * Math.PI)})`)
+            const radius = (conf.innerRadius + conf.outerRadius)/2
+            const arcid = 'arcid-' + uuidv4()
+            labelBlock.append('path')
+                      .attr('class', 'label-arcpath')
+                      .attr('fill', 'none')
+                      .attr('stroke', 'none')
+                      .attr('opacity', 1)
+                      .attr('d', arc()
+                          .innerRadius(radius)
+                          .outerRadius(radius)
+                          .startAngle(0)
+                          .endAngle(layout.blocks[layout.conf.trackLabelBlockId].end - layout.blocks[layout.conf.trackLabelBlockId].start)
+                          //.endAngle(layout.blocks[layout.conf.trackLabelBlockId].end - layout.blocks[layout.conf.trackLabelBlockId].start)
+                      )
+                      .attr('id', arcid)
+
+            const label = labelBlock.append('text')
+                .attr('class', conf.trackLabelConf.class)
+                .attr('text-anchor', 'start')
+
+            // http://stackoverflow.com/questions/20447106/how-to-center-horizontal-and-vertical-text-along-an-textpath-inside-an-arc-usi
+            const labelPath = label.append('textPath')
+                                   .attr('startOffset', '0%')
+                                   .attr('xlink:href', '#' + arcid)
+                                   .text(conf.trackLabelConf.label)
+            this.renderTrackLabelAddendum(label, labelPath)
+          }
+      }
   }
 
   theta (position, block) {

@@ -6,6 +6,10 @@ import forEach from 'lodash/forEach'
 import {axes, radial, values, common} from '../configs'
 
 const defaultConf = assign({
+  trackLabelConf: {
+    value: {label: undefined, class: undefined},
+    iteratee: false
+  },
   color: {
     value: '#fd6a62',
     iteratee: true
@@ -44,6 +48,11 @@ export default class Stack extends Track {
   constructor (instance, conf, data) {
     super(instance, conf, defaultConf, data, parseSpanValueData)
     this.buildLayers(this.data, this.conf.margin)
+  }
+
+  renderTrackLabelAddendum(label, labelPath) {
+      label.attr('text-anchor', 'end')
+      return;
   }
 
   buildLayers (data, margin) {
