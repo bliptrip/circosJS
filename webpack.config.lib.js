@@ -1,4 +1,5 @@
 const path = require('path')
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
 const filename = process.env.NODE_ENV === 'prod'
   ? 'circos.min.js' : 'circos.js'
@@ -26,5 +27,8 @@ module.exports = {
         loader: 'style-loader!css-loader'
       }
     ]
-  }
+  },
+  plugins: [
+      new UglifyJSPlugin()
+  ]
 }
