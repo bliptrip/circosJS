@@ -8,18 +8,18 @@
     "test:tdd": "NODE_ENV=test mocha --compilers js:babel-register --require ignore-styles --reporter nyan --watch src/*.test.js src/**/*.test.js",
     "coveralls": "CIRCOSJS_COVERAGE=1 mocha test --reporter mocha-lcov-reporter src/**/*.test.js | ./node_modules/coveralls/bin/coveralls.js",
     "start": "webpack --watch",
-    "build": "NODE_ENV=prod webpack --config webpack.config.lib.js --optimize-minimize && webpack --config webpack.config.lib.js --optimize-minimize && webpack --config webpack.config.js"
+    "build": "NODE_ENV=prod webpack --config webpack.config.lib.js --optimize-minimize && webpack --config webpack.config.lib.js && webpack --config webpack.config.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/nicgirault/circosJS.git"
+    "url": "https://github.com/bliptrip/circosJS.git"
   },
-  "author": "Nicolas Girault",
+  "author": "Nicolas Girault -- modified by Andrew Maule",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/nicgirault/circosJS/issues"
+    "url": "https://github.com/bliptrip/circosJS/issues"
   },
-  "homepage": "https://github.com/nicgirault/circosJS",
+  "homepage": "https://github.com/bliptrip/circosJS",
   "devDependencies": {
     "babel": "^6.5.2",
     "babel-core": "^6.26.3",
@@ -32,7 +32,7 @@
     "coveralls": "^3.0.1",
     "css-loader": "^0.28.11",
     "ignore-styles": "^5.0.1",
-    "jsdom": "9",
+    "jsdom": "^9",
     "mocha": "~5.2.0",
     "mocha-jsdom": "^1.1.0",
     "mocha-lcov-reporter": "^1.2.0",
