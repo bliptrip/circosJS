@@ -1,15 +1,15 @@
-const path = require('path');
+const path = require('path')
 
 module.exports = {
-  entry: './src/circos',
+  entry: './src/circos.js',
   output: {
+    path: __dirname + '/dist',
     filename: 'circos.es6.js',
-    library: {  type: 'umd',
-                name: "circosjs" },
-    uniqueName: "circosjs-webpack"
+    libraryTarget: 'umd',
+    umdNamedDefine: true
   },
   module: {
-    rules: [
+    loaders: [
       {
         test: /\.js$/,
         loader: 'babel-loader',
@@ -20,11 +20,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        loader: 'style-loader'
-      },
-      {
-        test: /\.css$/,
-        loader: 'css-loader'
+        loader: 'style-loader!css-loader'
       }
     ]
   }

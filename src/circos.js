@@ -41,6 +41,19 @@ class Core {
     this.clipboard = initClipboard(this.conf.container)
   }
 
+  detach () {
+    this.removeTracks(); //Remove all tracks from DOM tree
+    this.svg.remove(); //Remove 'svg' node from DOM tree
+    this.clipboard.remove(); //Remove the clipboard element
+    const container = select(this.conf.container);
+    container.select('div').remove(); /* Remove container 'div' child */
+    const tooltip = select('body').select('.circos-tooltip');
+    if (!tooltip.empty()) {
+        tooltip.remove(); //Delete the tooltip entry
+    }
+    this._layout = null;
+  }
+
   removeTracks (trackIds) {
     if (typeof (trackIds) === 'undefined') {
       map(this.tracks, (track, id) => {
@@ -109,4 +122,4 @@ const Circos = (conf) => {
   return instance
 }
 
-module.exports = Circos
+export default Circos;

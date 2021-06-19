@@ -8,7 +8,7 @@
     "test:tdd": "NODE_ENV=test mocha --compilers js:babel-register --require ignore-styles --reporter nyan --watch src/*.test.js src/**/*.test.js",
     "coveralls": "CIRCOSJS_COVERAGE=1 mocha test --reporter mocha-lcov-reporter src/**/*.test.js | ./node_modules/coveralls/bin/coveralls.js",
     "start": "webpack --watch",
-    "build": "webpack-cli --node-env prod --mode production --config webpack.config.js"
+    "build": "webpack --env NODE_ENV=dev --config webpack.config.js && webpack --env NODE_ENV=dev --config webpack.config.lib.js && webpack --env NODE_ENV=prod --config webpack.config.lib.js --optimize-minimize"
   },
   "repository": {
     "type": "git",
@@ -21,16 +21,16 @@
   },
   "homepage": "https://github.com/bliptrip/circosJS",
   "devDependencies": {
-    "babel": "^6.5.2",
+    "babel": "^6.23.0",
     "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.4",
-    "babel-plugin-transform-es2015-modules-umd": "^6.18.0",
-    "babel-polyfill": "^6.20.0",
-    "babel-preset-es2015": "^6.18.0",
-    "babel-register": "^6.23.0",
+    "babel-loader": "^8.2.2",
+    "babel-plugin-transform-es2015-modules-umd": "^6.24.1",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-register": "^6.26.0",
     "chai": "~4.1.2",
     "coveralls": "^3.0.1",
-    "css-loader": "^5.2.6",
+    "css-loader": "^0.28.11",
     "ignore-styles": "^5.0.1",
     "jsdom": "^9",
     "mocha": "^9.0.0",
@@ -39,9 +39,9 @@
     "sinon": "~5.0.10",
     "sinon-chai": "^3.1.0",
     "standard": "^11.0.1",
-    "style-loader": "^0.21.0",
-    "webpack": "^5.39.1",
-    "webpack-cli": "^4.7.2"
+    "style-loader": "^0.23.1",
+    "uglifyjs-webpack-plugin": "^1.3.0",
+    "webpack": "3.8.1"
   },
   "dependencies": {
     "clipboard-js": "^0.3.6",
