@@ -13,8 +13,8 @@ export default class Layout {
     }
 
     this.conf = defaultsDeep(conf, cloneDeep(defaultConf))
-    this.data = data
-    const agg = reduce(data, (aggregator, block) => {
+    this.data = JSON.parse(JSON.stringify(data)); //Make a copy of data -- otherwise it will store reference and modify that -- and if reference goes out of scope, can lose state
+    const agg = reduce(this.data, (aggregator, block) => {
       block.offset = aggregator.offset
       aggregator.blocks[block.id] = {
         label: block.label,
