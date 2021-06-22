@@ -5,7 +5,7 @@ import {select, event} from 'd3-selection'
 import {getConf} from '../config-utils'
 import {buildScale} from '../utils'
 import {buildColorValue} from '../colors'
-import {renderAxes} from '../axes'
+import {renderAxesLabels, renderAxes} from '../axes'
 
 const uuidv4 = require('uuid/v4');
 
@@ -47,6 +47,9 @@ export default class Track {
       .attr('z-index', this.conf.zIndex)
 
     this.renderTrackLabel(track, instance._layout, this.conf)
+    if (this.conf.axes && this.conf.axes.length > 0) {
+      renderAxesLabels(track, this.conf, instance._layout, this.scale); //Do this before generating datumContainer, otherwise it will repeat the axes labels for each block rendered
+    }
     const datumContainer = this.renderBlock(track, this.data, instance._layout, this.conf)
     if (this.conf.axes && this.conf.axes.length > 0) {
       renderAxes(datumContainer, this.conf, instance, this.scale)
@@ -144,7 +147,6 @@ export default class Track {
                           .outerRadius(radius)
                           .startAngle(0)
                           .endAngle(layout.blocks[layout.conf.trackLabelBlockId].end - layout.blocks[layout.conf.trackLabelBlockId].start)
-                          //.endAngle(layout.blocks[layout.conf.trackLabelBlockId].end - layout.blocks[layout.conf.trackLabelBlockId].start)
                       )
                       .attr('id', arcid)
 

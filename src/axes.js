@@ -38,14 +38,12 @@ export const _buildAxesData = (conf) => {
   }, [])
 }
 
-export const renderAxes = (parentElement, conf, instance, scale) => {
+export const renderAxesLabels  = (parentElement, conf, layout, scale) => {
   const axes         = _buildAxesData(conf)
-  const layout       = instance._layout;
 
   //Code to handle axis labels
   if((layout.conf.trackLabelBlockId !== undefined) && (layout.conf.trackLabelBlockId in layout.blocks)) {
-    const labelBlock = parentElement.select(function () { return this.parentNode; })
-                        .append('g')
+    const labelBlock = parentElement.append('g')
                         .attr('class', 'label-axes-block')
                         .attr('transform', `rotate(${layout.blocks[layout.conf.trackLabelBlockId].start * 360 / (2 * Math.PI)})`)
     conf.axes.forEach( (a,i) => {
@@ -79,6 +77,11 @@ export const renderAxes = (parentElement, conf, instance, scale) => {
             }
     });
   }
+}
+
+export const renderAxes = (parentElement, conf, instance, scale) => {
+  const axes         = _buildAxesData(conf)
+  const layout       = instance._layout;
 
   const axis = arc()
     .innerRadius((d) => {
