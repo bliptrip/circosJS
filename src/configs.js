@@ -71,6 +71,10 @@ const common = {
     value: null,
     iteratee: false
   },
+  selectAction: {
+    value: null,
+    iteratee: false
+  },
   events: {
     value: {},
     iteratee: false

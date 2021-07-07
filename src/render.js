@@ -5,9 +5,7 @@ import renderLayout from './layout/render'
 export default function render (ids = [], removeTracks, circos) {
   const renderAll = ids.length === 0
 
-  const svg = circos.svg
-    .attr('width', circos.conf.width)
-    .attr('height', circos.conf.height)
+  const svg = circos.svg;
 
   if (removeTracks) {
     forEach(circos.tracks, (track, trackId) => {
@@ -22,8 +20,8 @@ export default function render (ids = [], removeTracks, circos) {
       .attr(
         'transform',
         `translate(
-          ${parseInt(circos.conf.width / 2)},
-          ${parseInt(circos.conf.height / 2)}
+          ${parseInt(circos.conf.width/2)},
+          ${parseInt(circos.conf.height/2)}
         )`
       )
   }

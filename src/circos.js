@@ -27,9 +27,17 @@ class Core {
     this.tracks = {}
     this._layout = null
     this.conf = defaultsDeep(conf, defaultConf)
-    const container = select(this.conf.container).append('div')
-      .style('position', 'relative')
+    this.action = null
+    const container = select(this.conf.container)
+        .append('div')
+        // Container class to make it responsive.
+        .classed("svg-container", true);
     this.svg = container.append('svg')
+                // Responsive SVG needs these 2 attributes and no width and height attr.
+                .attr("preserveAspectRatio", "xMinYMin meet")
+                .attr("viewBox", "0 0 " + this.conf.width + " " + this.conf.height)
+                // Class to make it responsive.
+                .classed("svg-content-responsive", true);
     if (select('body').select('.circos-tooltip').empty()) {
       this.tip = select('body').append('div')
       .attr('class', 'circos-tooltip')

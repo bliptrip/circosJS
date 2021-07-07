@@ -1,4 +1,5 @@
 import {registerTooltip} from '../behaviors/tooltip'
+import {registerSelectAction} from '../behaviors/selectaction.js'
 import {dispatch} from 'd3-dispatch'
 import {arc} from 'd3-shape'
 import {select, event} from 'd3-selection'
@@ -14,7 +15,7 @@ const uuidv4 = require('uuid/v4');
 **/
 export default class Track {
   constructor (instance, conf, defaultConf, data, dataParser) {
-    this.dispatch = dispatch('mouseover', 'mouseout')
+    this.dispatch = dispatch('mouseover', 'mouseout', 'mouseclick')
     this.parseData = dataParser
     this.loadData(data, instance)
     this.conf = getConf(conf, defaultConf, this.meta, instance)
@@ -58,6 +59,9 @@ export default class Track {
     if (this.conf.tooltipContent) {
       registerTooltip(this, instance, selection, this.conf)
     }
+    if (this.conf.selectAction) {
+        registerSelectAction(this, instance, selection, this.conf);
+    }
     selection.on('mouseover', (d, i) => {
       this.dispatch.call('mouseover', this, d)
       if (this.conf.tooltipContent) {
@@ -66,6 +70,9 @@ export default class Track {
     })
     selection.on('mouseout', (d, i) => {
       this.dispatch.call('mouseout', this, d)
+    })
+    selection.on('click', (d,i) => {
+      this.dispatch.call('mouseclick', this, d)
     })
 
     Object.keys(this.conf.events).forEach((eventName) => {
